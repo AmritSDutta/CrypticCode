@@ -1,4 +1,4 @@
-package com.example.demo.crypto;
+package com.example.demo.bouncycastle;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,20 +10,16 @@ import javax.crypto.SecretKey;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 
-public class GCMEncryptionTest {
+public class BCEncryptionServiceTest {
 
     private final String toBeEncrypted = "Nice to see you there";
 
-    @Test
-    public void testMaxAllowedKeyLength () throws NoSuchAlgorithmException {
-        //if following assertion fails, use - Security.setProperty("crypto.policy", "unlimited");
-        Assertions.assertTrue(javax.crypto.Cipher.getMaxAllowedKeyLength("AES") >= 2147483647);
-    }
 
     @Test
-    public void testEncryption() throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, InvalidAlgorithmParameterException {
-        GCMService  encryptionService = new GCMService();
+    public void testEncryption() throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, NoSuchProviderException {
+        BCEncryptionService encryptionService = BCEncryptionService.getInstance();
         SecretKey key = encryptionService.getKeySimple();
         byte[] encryptedTExt = encryptionService.encrypt(key,toBeEncrypted);
         System.out.println("Encrypted String : " + encryptedTExt);
@@ -31,8 +27,9 @@ public class GCMEncryptionTest {
     }
 
     @Test
-    public void testDecrypt() throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, InvalidAlgorithmParameterException {
-        GCMService  encryptionService = new GCMService();
+    public void testDecrypt() throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException,
+            BadPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, NoSuchProviderException {
+        BCEncryptionService  encryptionService = BCEncryptionService.getInstance();
         SecretKey key = encryptionService.getKeySimple();
         byte[] encryptedTExt = encryptionService.encrypt(key, toBeEncrypted);
         String decryptedText = encryptionService.decrypt(key,encryptedTExt);
