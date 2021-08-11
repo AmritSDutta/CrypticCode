@@ -13,7 +13,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class DesEncryptionTest {
 
-    private final String toBeEncrypted = "amrit";
+    private final String toBeEncrypted = "Yup, i will be getting encrypted";
 
     @Test
     public void testEncryption() throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, InvalidAlgorithmParameterException {

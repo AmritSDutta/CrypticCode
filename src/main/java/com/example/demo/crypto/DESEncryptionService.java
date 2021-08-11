@@ -18,7 +18,7 @@ public class DESEncryptionService {
     private static final String ALGO = "DES";
     private static final String ALGO_FOR_ENCRYPTION = "DES/CBC/PKCS5Padding";
     private static final int  MAX_IV_LENGTH = 8;
-    private byte[] IV;
+    private byte[] iv;
 
     public SecretKey getKeySimple() throws NoSuchAlgorithmException {
         return KeyGenerator.getInstance(ALGO).generateKey();
@@ -27,11 +27,11 @@ public class DESEncryptionService {
     public byte[] encrypt(SecretKey key, String plainText) throws NoSuchPaddingException, NoSuchAlgorithmException,
             InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
 
-        this.IV = new byte[MAX_IV_LENGTH];
-        new SecureRandom().nextBytes(IV);
+        this.iv = new byte[MAX_IV_LENGTH];
+        new SecureRandom().nextBytes(iv);
         Cipher cipher = Cipher.getInstance(ALGO_FOR_ENCRYPTION);
         //As CBC used need an initialization vector.
-        AlgorithmParameterSpec algoParamSpec = new IvParameterSpec(IV);
+        AlgorithmParameterSpec algoParamSpec = new IvParameterSpec(iv);
         cipher.init(Cipher.ENCRYPT_MODE, key, algoParamSpec);
 
         return cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
@@ -40,7 +40,7 @@ public class DESEncryptionService {
     public String decrypt(SecretKey key, byte[] cypherText) throws NoSuchAlgorithmException, NoSuchPaddingException,
             InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
         Cipher cipher = Cipher.getInstance(ALGO_FOR_ENCRYPTION);
-        cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(this.IV));
+        cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(this.iv));
         return new String(cipher.doFinal(cypherText));
     }
 
